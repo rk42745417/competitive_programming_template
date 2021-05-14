@@ -1,2 +1,2 @@
 # Codes of Competitive Programming by JiKuai
-Not all codes are code by me.
+Not all codes are coded by me.
