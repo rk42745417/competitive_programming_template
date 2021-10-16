@@ -1,2 +1,2 @@
-# Codes of Competitive Programming by JiKuai
+# Templates For Competitve Programming
 Not all codes are coded by me.

@@ -10,3 +10,4 @@ vector<int> kmp(string &s) {
 	}
 	return dp;
 }
+/************** KMP algorithm *************/

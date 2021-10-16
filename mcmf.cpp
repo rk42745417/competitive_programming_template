@@ -1,4 +1,4 @@
-struct CostFlow {
+struct cost_flow {
     static const int MXN = 1005;
     static const int64_t INF = 102938475610293847LL;
     struct Edge {
@@ -61,4 +61,5 @@ struct CostFlow {
         }
         return {fl, cost};
     }
-}flow;
+} flow;
+/**************************** Min Cost Max Flow *************************/

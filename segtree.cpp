@@ -1,5 +1,7 @@
 struct segtree {
-	static const int N = 1e5+25;
+	/* N is required as the length of the array.
+	 * default operations: range addtion and rage sum query
+	 */
 	int64_t arr[N << 1], tag[N];
 	int n;
 	void init(int _n) {
@@ -22,7 +24,7 @@ struct segtree {
 	}
 	void pull(int p) {
 		for(int h = 1; p > 1; p >>= 1, h++) {
-			arr[p >> 1] = arr[p] + arr[p ^ 1] + (tag[p >> 1] << h);//Be careful of the exchange
+			arr[p >> 1] = arr[p] + arr[p ^ 1] + (tag[p >> 1] << h); //Be careful of the exchange
 		}
 	}
 	void mod(int l, int r, int val) {
@@ -47,3 +49,4 @@ struct segtree {
 		return res;
 	}
 } tree;
+/*************************** Segment Tree ************************/
