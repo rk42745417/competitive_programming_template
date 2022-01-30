@@ -27,7 +27,9 @@ struct segtree {
 			arr[p >> 1] = arr[p] + arr[p ^ 1] + (tag[p >> 1] << h); //Be careful of the exchange
 		}
 	}
-	void mod(int l, int r, int val) {
+	void edt(int l, int r, int val) {
+		if(l == r)
+			return;
 		int tl = l + n, tr = r + n - 1, h = 0;
 		for(l += n, r += n; l < r; l >>= 1, r >>= 1, h++) {
 			if(l & 1)
@@ -38,6 +40,8 @@ struct segtree {
 		pull(tl); pull(tr);
 	}
 	ll que(int l, int r) {
+		if(l == r)
+			return 0; // do something!
 		int64_t res = 0;
 		push(l + n); push(r + n - 1);
 		for(l += n, r += n; l < r; l >>= 1, r >>= 1) {
