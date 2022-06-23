@@ -41,6 +41,16 @@ template<typename T> void emilia_mata_tenshi(const char *s, T l, T r) {
 #define print(x) 48763
 #endif
 
+template<typename T, typename T2> istream& operator>>(istream &is, pair<T, T2> &obj) {
+	is >> obj.first >> obj.second;
+	return is;
+}
+template<typename T> istream& operator>>(istream &is, vector<T> &obj) {
+	for(auto &x : obj)
+		is >> x;
+	return is;
+}
+
 #define YN(x) ((x) ? "YES" : "NO")
 #define yn(x) ((x) ? "Yes" : "No")
 #define EmiliaMyWife ios::sync_with_stdio(0); cin.tie(NULL);
