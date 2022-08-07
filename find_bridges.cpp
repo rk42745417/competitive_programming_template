@@ -47,12 +47,12 @@ struct find_bridges {
 			ans += is[i];
 		return ans;
 	}
-	inline bool is_edge(int x) { return is[x]; }
+	inline bool is_bridge(int x) { return is[x]; }
 };
 /*
- * find_bridges(int n): node count
+ * find_bridges(int n): n nodes
  * add_edge(int u, int v): add undirected edge (u, v)
  * find(): return count of bridges
- * is_edge(int x): return whether edge x is bridge
+ * is_brdige(int x): return whether edge x is bridge
  */
 /************ Tarjan's algorithm to find bridges ************/

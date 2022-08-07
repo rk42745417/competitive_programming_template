@@ -41,6 +41,6 @@ struct bipartite_matching {
  * bipartite(int n, int m): left size n, right size m
  * match(): return max matching
  * add_edge(int u, int v): add edge from left[u] to right[v]
- * other(int x): return the matched right index of left[u], -1 if not matched
+ * other(int u): return the matched right index of left[u], -1 if not matched
  */
 /********* Bipartite Matching ********************/
