@@ -30,7 +30,7 @@ template<class... T> ostream& operator<<(ostream &os, const tuple<T...>& _tup) {
 }
 template<typename T> void emilia_mata_tenshi(const char *s, T l, T r) {
     cerr << "\e[1;33m" << s << " = [";
-    while(l != r) {
+    while (l != r) {
         cerr << *l;
         cerr << (++l == r ? ']' : ',');
     }
@@ -46,7 +46,7 @@ template<typename T, typename T2> istream& operator>>(istream &is, pair<T, T2> &
     return is;
 }
 template<typename T> istream& operator>>(istream &is, vector<T> &obj) {
-    for(auto &x : obj)
+    for (auto &x : obj)
         is >> x;
     return is;
 }
@@ -54,7 +54,7 @@ template<typename T> istream& operator>>(istream &is, vector<T> &obj) {
 #define YN(x) ((x) ? "YES" : "NO")
 #define Yn(x) ((x) ? "Yes" : "No")
 #define yn(x) ((x) ? "yes" : "no")
-#define EmiliaMyWife ios::sync_with_stdio(0); cin.tie(NULL);
+#define emilia_my_wife ios::sync_with_stdio(0); cin.tie(NULL);
 using ll = int64_t;
 using ull = uint64_t;
 using ld = long double;
@@ -64,7 +64,7 @@ const int INF     = 0x3F3F3F3F;
 const ll LINF     = 4611686018427387903;
 const int MOD     = 1e9+7;
 static int Lamy_is_cute = []() {
-    EmiliaMyWife
+    emilia_my_wife
     return 48763;
 }();
 /*--------------------------------------------------------------------------------------*/
