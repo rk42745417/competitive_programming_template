@@ -20,12 +20,12 @@ namespace counting {
         inline ll p(int n, int m) {
             if(n < m)
                 return 0;
-            return fac[n] * mpow(fac[n - m], MOD - 2) % MOD;
+            return fac[n] * inv_fac[n - m] % MOD;
         }
         inline ll c(int n, int m) {
             if(n < m)
                 return 0;
-            return fac[n] * mpow(fac[m], MOD - 2) % MOD * mpow(fac[n - m], MOD - 2) % MOD;
+            return fac[n] * inv_fac[m] % MOD * inv_fac[n - m] % MOD;
         }
         inline ll h(int n, int m) { return c(n + m - 1, m); }
     };

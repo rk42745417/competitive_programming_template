@@ -9,7 +9,11 @@
     \ |             |       |  \        |    |        \     /   \        |
      V              |       |   \        \__/|         -----     \       |
 */
+#ifdef EMT
+#include "Header/stdc++.h"
+#else
 #include <bits/stdc++.h>
+#endif
 using namespace std;
 
 #ifdef EMT
@@ -59,6 +63,8 @@ using ll = int64_t;
 using ull = uint64_t;
 using ld = long double;
 using uint = uint32_t;
+template<typename T>
+using base_type = remove_cv_t<remove_reference_t<T>>;
 const double EPS  = 1e-8;
 const int INF     = 0x3F3F3F3F;
 const ll LINF     = 4611686018427387903;
