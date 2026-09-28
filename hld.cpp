@@ -5,9 +5,10 @@ struct heavy_light_decomposition {
      * Can be modified:
      * tree := Segment Tree or other data structure
      */
-    int dep[N], pa[N], hea[N], hev[N], pos[N], t;
+    int dep[N], pa[N], hea[N], hev[N], pos[N], sz[N], t;
     int dfs(int u) {
-        int mx = 0, sz = 1;
+        int mx = 0;
+        sz[u] = 1;
         hev[u] = -1;
         for (int v : edge[u]) {
             if (v == pa[u])
@@ -17,9 +18,9 @@ struct heavy_light_decomposition {
             int c = dfs(v);
             if (c > mx)
                 mx = c, hev[u] = v;
-            sz += c;
+            sz[u] += c;
         }
-        return sz;
+        return sz[u];
     }
     void find_head(int u, int h) {
         hea[u] = h;
@@ -36,9 +37,24 @@ struct heavy_light_decomposition {
         dfs(rt);
         find_head(rt, rt);
     }
-    /* It is necessary to edit below for every use */
-    void edt(int a, int b, int v) {
-
+    int lca(int a, int b) const {
+        for (; hea[a] != hea[b]; a = pa[hea[a]])
+            if (dep[hea[a]] < dep[hea[b]])
+                swap(a, b);
+        return dep[a] < dep[b] ? a : b;
+    }
+    // subtree of u occupies positions [pos[u], pos[u] + sz[u])
+    pair<int, int> subtree(int u) const { return {pos[u], pos[u] + sz[u]}; }
+    /* Edit below to fit the data structure in use */
+    void edt(int a, int b, ll v) { // add v to every node on path
+        for (; hea[a] != hea[b]; a = pa[hea[a]]) {
+            if (dep[hea[a]] < dep[hea[b]])
+                swap(a, b);
+            tree.edt(pos[hea[a]], pos[a] + 1, v);
+        }
+        if (dep[a] > dep[b])
+            swap(a, b);
+        tree.edt(pos[a], pos[b] + 1, v);
     }
     ll query(int a, int b) { // query path sum
         ll res = 0;

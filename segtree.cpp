@@ -9,6 +9,12 @@ struct segtree {
         arr.assign(n << 1, 0);
         tag.assign(n, 0);
     }
+    void init(const vector<ll> &a) { // build from initial values in O(n)
+        init((int)a.size());
+        copy(a.begin(), a.end(), arr.begin() + n);
+        for (int i = n - 1; i > 0; i--)
+            arr[i] = arr[i << 1] + arr[i << 1 | 1];
+    }
     void upd(int p, ll val, int h) {
         arr[p] += val << h;
         if (p < n)

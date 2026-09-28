@@ -26,6 +26,8 @@ namespace counting {
             return fac[n] * inv_fac[m] % MOD * inv_fac[n - m] % MOD;
         }
         ll h(int n, int m) const { return c(n + m - 1, m); }
+        ll inv(int n) const { return inv_fac[n] * fac[n - 1] % MOD; } // n >= 1
+        ll catalan(int n) const { return c(2 * n, n) * inv(n + 1) % MOD; }
     };
 } using namespace counting;
 /****************** Counting (mod MOD) ******************/

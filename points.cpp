@@ -8,6 +8,8 @@ struct point {
     point operator+(const point &b) const { return point(x + b.x, y + b.y); }
     point operator-(const point &b) const { return point(x - b.x, y - b.y); }
     point operator-() const { return point(-x, -y); }
+    point operator*(const T &k) const { return point(x * k, y * k); }
+    point operator/(const T &k) const { return point(x / k, y / k); }
 
     T operator*(const point &b) const { return x * b.x + y * b.y; }
     T operator^(const point &b) const { return x * b.y - y * b.x; }
@@ -16,6 +18,7 @@ struct point {
     bool operator<(const point &b) const { return x == b.x ? y < b.y : x < b.x; }
 
     T dis2() const { return (*this) * (*this); }
+    double len() const { return sqrt((double)dis2()); }
     point prep() const { return point(-y, x); } // 左旋法向量
     int quad() const {
         if (x == 0 && y == 0)
@@ -45,5 +48,14 @@ struct point {
         return (a ^ b) > 0;
     } // 極角排序，角度相同近的在前
 };
+// orientation of a -> b -> c: 1 counter-clockwise, -1 clockwise, 0 collinear
+template<typename T>
+int ori(const point<T> &a, const point<T> &b, const point<T> &c) {
+    T v = (b - a) ^ (c - a);
+    if constexpr (is_floating_point_v<T>)
+        return v > EPS ? 1 : v < -EPS ? -1 : 0;
+    else
+        return (v > 0) - (v < 0);
+}
 const double PI = acos(-1.0);
 /*********** Geometry--Points *************/

@@ -7,8 +7,7 @@ struct cost_flow {
     };
     int n, s, t;
     vector<int> prv, prvL;
-    vector<bool> inq;
-    vector<ll> dis;
+    vector<ll> dis, h;
     ll fl, cost;
     vector<vector<Edge>> E;
     void init(int _n, int _s, int _t) {
@@ -16,40 +15,72 @@ struct cost_flow {
         E.assign(n, {});
         prv.resize(n);
         prvL.resize(n);
-        inq.resize(n);
         dis.resize(n);
+        h.resize(n);
         fl = cost = 0;
     }
     void add_edge(int u, int v, ll f, ll c) {
         E[u].emplace_back(v, (int)E[v].size(), f, c);
         E[v].emplace_back(u, (int)E[u].size() - 1, 0, -c);
     }
-    pair<ll, ll> flow() {
-        while (true) {
-            fill(dis.begin(), dis.end(), COST_INF);
-            fill(inq.begin(), inq.end(), false);
-            dis[s] = 0;
-            queue<int> que;
-            que.push(s);
-            while (!que.empty()) {
-                int u = que.front();
-                que.pop();
-                inq[u] = false;
-                for (int i = 0; i < (int)E[u].size(); i++) {
-                    auto [v, r, f, c] = E[u][i];
-                    if (f > 0 && dis[v] > dis[u] + c) {
-                        prv[v] = u;
-                        prvL[v] = i;
-                        dis[v] = dis[u] + c;
-                        if (!inq[v]) {
-                            inq[v] = true;
-                            que.push(v);
-                        }
+    // SPFA once for initial potentials, so negative costs are allowed (no negative cycles)
+    void init_potential() {
+        vector<bool> inq(n);
+        fill(h.begin(), h.end(), COST_INF);
+        h[s] = 0;
+        queue<int> que;
+        que.push(s);
+        while (!que.empty()) {
+            int u = que.front();
+            que.pop();
+            inq[u] = false;
+            for (auto &e : E[u]) {
+                if (e.f > 0 && h[e.v] > h[u] + e.c) {
+                    h[e.v] = h[u] + e.c;
+                    if (!inq[e.v]) {
+                        inq[e.v] = true;
+                        que.push(e.v);
                     }
                 }
             }
-            if (dis[t] == COST_INF)
-                break;
+        }
+    }
+    // Dijkstra on reduced costs c(u, v) + h[u] - h[v] >= 0
+    bool dijkstra() {
+        using node = pair<ll, int>;
+        fill(dis.begin(), dis.end(), COST_INF);
+        dis[s] = 0;
+        priority_queue<node, vector<node>, greater<>> pq;
+        pq.emplace(0, s);
+        while (!pq.empty()) {
+            auto [d, u] = pq.top();
+            pq.pop();
+            if (d != dis[u])
+                continue;
+            for (int i = 0; i < (int)E[u].size(); i++) {
+                const Edge &e = E[u][i];
+                if (e.f <= 0)
+                    continue;
+                ll nd = d + e.c + h[u] - h[e.v];
+                if (dis[e.v] > nd) {
+                    dis[e.v] = nd;
+                    prv[e.v] = u;
+                    prvL[e.v] = i;
+                    pq.emplace(nd, e.v);
+                }
+            }
+        }
+        if (dis[t] == COST_INF)
+            return false;
+        for (int i = 0; i < n; i++)
+            if (dis[i] != COST_INF)
+                h[i] += dis[i];
+        return true;
+    }
+    // O(F (V + E) log V) after one SPFA
+    pair<ll, ll> flow() {
+        init_potential();
+        while (dijkstra()) {
             ll tf = COST_INF;
             for (int v = t; v != s; v = prv[v])
                 tf = min(tf, E[prv[v]][prvL[v]].f);
@@ -58,7 +89,7 @@ struct cost_flow {
                 e.f -= tf;
                 E[v][e.r].f += tf;
             }
-            cost += tf * dis[t];
+            cost += tf * (h[t] - h[s]);
             fl += tf;
         }
         return {fl, cost};

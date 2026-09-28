@@ -34,24 +34,24 @@ struct dinic {
         }
         return level[t] != -1;
     }
+    // pushes as much as possible from v in one call (multi-augment)
     ll dfs(int v, ll pushed) {
-        if (pushed == 0)
-            return 0;
-        if (v == t)
+        if (v == t || pushed == 0)
             return pushed;
+        ll res = 0;
         for (int &cid = ptr[v]; cid < (int)adj[v].size(); cid++) {
             int id = adj[v][cid];
             int u = edges[id].u;
             if (level[v] + 1 != level[u] || edges[id].cap - edges[id].flow < 1)
                 continue;
-            ll tr = dfs(u, min(pushed, edges[id].cap - edges[id].flow));
-            if (tr == 0)
-                continue;
+            ll tr = dfs(u, min(pushed - res, edges[id].cap - edges[id].flow));
             edges[id].flow += tr;
             edges[id ^ 1].flow -= tr;
-            return tr;
+            res += tr;
+            if (res == pushed)
+                return res;
         }
-        return 0;
+        return res;
     }
     ll flow() {
         ll f = 0;
@@ -66,6 +66,13 @@ struct dinic {
                 f += pushed;
         }
         return f;
+    }
+    // call after flow(): cut[v] is true iff v is on the source side of a min cut
+    vector<bool> min_cut() const {
+        vector<bool> cut(n);
+        for (int i = 0; i < n; i++)
+            cut[i] = level[i] != -1;
+        return cut;
     }
 };
 /*********************** Dinic's Max Flow ***********************/
