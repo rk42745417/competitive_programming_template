@@ -39,7 +39,7 @@ struct segtree {
 		}
 		pull(tl); pull(tr);
 	}
-	ll que(int l, int r) {
+	int64_t que(int l, int r) {
 		if(l == r)
 			return 0; // do something!
 		int64_t res = 0;

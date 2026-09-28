@@ -17,7 +17,7 @@
 using namespace std;
 
 #ifdef EMT
-#define debug(x) cerr << "\e[1;31m" << #x << " = " << (x) << "\e[0m\n"
+#define debug(x) cerr << "\033[1;31m" << #x << " = " << (x) << "\033[0m\n"
 #define print(x) emilia_mata_tenshi(#x, begin(x), end(x))
 template<typename T, typename T2> ostream& operator<<(ostream &os, const pair<T, T2> &obj) {
     return os << '{' << obj.first << ',' << obj.second << '}';
@@ -29,16 +29,16 @@ template<class TupType, size_t... I> void lamy_kawaii(ostream& os, const TupType
     os << '}';
 }
 template<class... T> ostream& operator<<(ostream &os, const tuple<T...>& _tup) {
-    lamy_kawaii(os, _tup, make_index_sequence<sizeof...(T)>());
+    lamy_kawaii(os, _tup, index_sequence_for<T...>());
     return os;
 }
 template<typename T> void emilia_mata_tenshi(const char *s, T l, T r) {
-    cerr << "\e[1;33m" << s << " = [";
+    cerr << "\033[1;33m" << s << " = [";
     while (l != r) {
         cerr << *l;
         cerr << (++l == r ? ']' : ',');
     }
-    cerr << "\e[0m\n";
+    cerr << "\033[0m\n";
 }
 #else
 #define debug(x) 48763
