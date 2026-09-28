@@ -1,30 +1,30 @@
-void R(int &a) {
-	char c = getchar();
-	a = 0;
-	bool neg = 0;
-	while(c != '-' && (c < '0' || c > '9'))
-		c = getchar();
-	if(c == '-') {
-		neg = 1;
-		c = getchar();
-	}
-	while('0' <= c && c <= '9')
-		a = (a * 10 + (c ^ 48)), c = getchar();
-	if(neg)
-		a = -a;
+template<typename T>
+void R(T &a) {
+    int c = getchar();
+    bool neg = false;
+    while (c != EOF && c != '-' && (c < '0' || '9' < c))
+        c = getchar();
+    if (c == '-') {
+        neg = true;
+        c = getchar();
+    }
+    make_unsigned_t<T> u = 0;
+    while ('0' <= c && c <= '9')
+        u = u * 10 + make_unsigned_t<T>(c - '0'), c = getchar();
+    a = T(neg ? 0 - u : u);
 }
-char buffer[20];
-void W(int a) {
-	if(!a) {
-		putchar('0');
-		return;
-	}
-	int n = 0;
-	if(a < 0)
-		putchar('-'), a = -a;
-	while(a)
-		buffer[n++] = a % 10, a /= 10;
-	for(n--; ~n; n--)
-		putchar(buffer[n] | 48);
+template<typename T>
+void W(T a) {
+    char buf[24];
+    int n = 0;
+    make_unsigned_t<T> u = make_unsigned_t<T>(a);
+    if constexpr (is_signed_v<T>)
+        if (a < 0)
+            putchar('-'), u = 0 - u;
+    do
+        buf[n++] = char('0' + u % 10);
+    while (u /= 10);
+    while (n)
+        putchar(buf[--n]);
 }
 /*********************** Fast IO *********************/

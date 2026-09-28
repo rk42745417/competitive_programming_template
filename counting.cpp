@@ -1,32 +1,31 @@
 namespace counting {
     ll mpow(ll a, ull b) {
         ll res = 1;
-        for(a %= MOD; b; b >>= 1, a = a * a % MOD)
-            if(b & 1)
+        for (a = (a % MOD + MOD) % MOD; b; b >>= 1, a = a * a % MOD)
+            if (b & 1)
                 res = res * a % MOD;
         return res;
     }
     struct combinatoric {
         vector<ll> fac, inv_fac;
-        combinatoric(int n) {
-            fac.resize(n, 1);
-            inv_fac.resize(n);
-            for(int i = 2; i < n; i++)
-                fac[i] = fac[i - 1] * i % MOD;
-            inv_fac[n - 1] = mpow(fac[n - 1], MOD - 2);
-            for(int i = n - 1; i; i--)
-                inv_fac[i - 1] = inv_fac[i] * i % MOD;
+        explicit combinatoric(int n) : fac(max(n, 1), 1), inv_fac(fac.size()) {
+            for (size_t i = 2; i < fac.size(); i++)
+                fac[i] = fac[i - 1] * ll(i) % MOD;
+            inv_fac.back() = mpow(fac.back(), MOD - 2);
+            for (size_t i = fac.size() - 1; i; i--)
+                inv_fac[i - 1] = inv_fac[i] * ll(i) % MOD;
         }
-        inline ll p(int n, int m) {
-            if(n < m)
+        ll p(int n, int m) const {
+            if (m < 0 || n < m)
                 return 0;
             return fac[n] * inv_fac[n - m] % MOD;
         }
-        inline ll c(int n, int m) {
-            if(n < m)
+        ll c(int n, int m) const {
+            if (m < 0 || n < m)
                 return 0;
             return fac[n] * inv_fac[m] % MOD * inv_fac[n - m] % MOD;
         }
-        inline ll h(int n, int m) { return c(n + m - 1, m); }
+        ll h(int n, int m) const { return c(n + m - 1, m); }
     };
 } using namespace counting;
+/****************** Counting (mod MOD) ******************/

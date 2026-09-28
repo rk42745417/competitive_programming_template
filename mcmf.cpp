@@ -1,60 +1,62 @@
 struct cost_flow {
-    static const int MXN = 1005;
-    static const int64_t INF = 102938475610293847LL;
+    static constexpr ll COST_INF = LINF;
     struct Edge {
         int v, r;
-        int64_t f, c;
-        Edge(int a,int b,int _c,int d):v(a),r(b),f(_c),c(d){
-		}
+        ll f, c;
+        Edge(int _v, int _r, ll _f, ll _c) : v(_v), r(_r), f(_f), c(_c) {}
     };
-    int n, s, t, prv[MXN], prvL[MXN], inq[MXN];
-    int64_t dis[MXN], fl, cost;
-    vector<Edge> E[MXN];
+    int n, s, t;
+    vector<int> prv, prvL;
+    vector<bool> inq;
+    vector<ll> dis;
+    ll fl, cost;
+    vector<vector<Edge>> E;
     void init(int _n, int _s, int _t) {
         n = _n; s = _s; t = _t;
-        for (int i=0; i<n; i++) E[i].clear();
+        E.assign(n, {});
+        prv.resize(n);
+        prvL.resize(n);
+        inq.resize(n);
+        dis.resize(n);
         fl = cost = 0;
     }
-    void add_edge(int u, int v, int64_t f, int64_t c)
-    {
-        E[u].push_back(Edge(v, E[v].size() , f, c));
-        E[v].push_back(Edge(u, E[u].size()-1, 0, -c));
+    void add_edge(int u, int v, ll f, ll c) {
+        E[u].emplace_back(v, (int)E[v].size(), f, c);
+        E[v].emplace_back(u, (int)E[u].size() - 1, 0, -c);
     }
-    pair<int64_t, int64_t> flow() {
+    pair<ll, ll> flow() {
         while (true) {
-            for (int i=0; i<n; i++) {
-                dis[i] = INF;
-                inq[i] = 0;
-            }
+            fill(dis.begin(), dis.end(), COST_INF);
+            fill(inq.begin(), inq.end(), false);
             dis[s] = 0;
             queue<int> que;
             que.push(s);
             while (!que.empty()) {
-                int u = que.front(); que.pop();
-                inq[u] = 0;
-                for (int i=0; i<E[u].size(); i++) {
-                    int v = E[u][i].v;
-                    int64_t w = E[u][i].c;
-                    if (E[u][i].f > 0 && dis[v] > dis[u] + w) {
-                        prv[v] = u; prvL[v] = i;
-                        dis[v] = dis[u] + w;
+                int u = que.front();
+                que.pop();
+                inq[u] = false;
+                for (int i = 0; i < (int)E[u].size(); i++) {
+                    auto [v, r, f, c] = E[u][i];
+                    if (f > 0 && dis[v] > dis[u] + c) {
+                        prv[v] = u;
+                        prvL[v] = i;
+                        dis[v] = dis[u] + c;
                         if (!inq[v]) {
-                            inq[v] = 1;
+                            inq[v] = true;
                             que.push(v);
                         }
                     }
                 }
             }
-            if (dis[t] == INF) break;
-            int64_t tf = INF;
-            for (int v=t, u, l; v!=s; v=u) {
-                u=prv[v]; l=prvL[v];
-                tf = min(tf, E[u][l].f);
-            }
-            for (int v=t, u, l; v!=s; v=u) {
-                u=prv[v]; l=prvL[v];
-                E[u][l].f -= tf;
-                E[v][E[u][l].r].f += tf;
+            if (dis[t] == COST_INF)
+                break;
+            ll tf = COST_INF;
+            for (int v = t; v != s; v = prv[v])
+                tf = min(tf, E[prv[v]][prvL[v]].f);
+            for (int v = t; v != s; v = prv[v]) {
+                Edge &e = E[prv[v]][prvL[v]];
+                e.f -= tf;
+                E[v][e.r].f += tf;
             }
             cost += tf * dis[t];
             fl += tf;

@@ -1,56 +1,59 @@
 struct segtree {
-	/* N is required as the length of the array.
-	 * default operations: range addtion and rage sum query
-	 */
-	int64_t arr[N << 1], tag[N];
-	int n;
-	void init(int _n) {
-		n = _n;
-	}
-	void upd(int p, int64_t val, int h) {
-		arr[p] += val << h;
-		if(p < n)
-			tag[p] += val;
-	}
-	void push(int p) {
-		for(int h = __lg(p); ~h; h--) {
-			int i = p >> h;
-			if(!tag[i >> 1])
-				continue;
-			upd(i, tag[i >> 1], h);
-			upd(i ^ 1, tag[i >> 1], h);
-			tag[i >> 1] = 0;
-		}
-	}
-	void pull(int p) {
-		for(int h = 1; p > 1; p >>= 1, h++) {
-			arr[p >> 1] = arr[p] + arr[p ^ 1] + (tag[p >> 1] << h); //Be careful of the exchange
-		}
-	}
-	void edt(int l, int r, int val) {
-		if(l == r)
-			return;
-		int tl = l + n, tr = r + n - 1, h = 0;
-		for(l += n, r += n; l < r; l >>= 1, r >>= 1, h++) {
-			if(l & 1)
-				upd(l++, val, h);
-			if(r & 1)
-				upd(--r, val, h);
-		}
-		pull(tl); pull(tr);
-	}
-	int64_t que(int l, int r) {
-		if(l == r)
-			return 0; // do something!
-		int64_t res = 0;
-		push(l + n); push(r + n - 1);
-		for(l += n, r += n; l < r; l >>= 1, r >>= 1) {
-			if(l & 1)
-				res += arr[l++];
-			if(r & 1)
-				res += arr[--r];
-		}
-		return res;
-	}
+    /* default operations: range addition and range sum query
+     * all ranges are half-open [l, r)
+     */
+    vector<ll> arr, tag;
+    int n;
+    void init(int _n) {
+        n = _n;
+        arr.assign(n << 1, 0);
+        tag.assign(n, 0);
+    }
+    void upd(int p, ll val, int h) {
+        arr[p] += val << h;
+        if (p < n)
+            tag[p] += val;
+    }
+    void push(int p) {
+        for (int h = __lg(p); ~h; h--) {
+            int i = p >> h;
+            if (!tag[i >> 1])
+                continue;
+            upd(i, tag[i >> 1], h);
+            upd(i ^ 1, tag[i >> 1], h);
+            tag[i >> 1] = 0;
+        }
+    }
+    void pull(int p) {
+        for (int h = 1; p > 1; p >>= 1, h++)
+            arr[p >> 1] = arr[p] + arr[p ^ 1] + (tag[p >> 1] << h); // Be careful of the exchange
+    }
+    void edt(int l, int r, ll val) {
+        if (l == r)
+            return;
+        int tl = l + n, tr = r + n - 1, h = 0;
+        for (l += n, r += n; l < r; l >>= 1, r >>= 1, h++) {
+            if (l & 1)
+                upd(l++, val, h);
+            if (r & 1)
+                upd(--r, val, h);
+        }
+        pull(tl);
+        pull(tr);
+    }
+    ll que(int l, int r) {
+        if (l == r)
+            return 0; // do something!
+        ll res = 0;
+        push(l + n);
+        push(r + n - 1);
+        for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
+            if (l & 1)
+                res += arr[l++];
+            if (r & 1)
+                res += arr[--r];
+        }
+        return res;
+    }
 } tree;
 /*************************** Segment Tree ************************/
