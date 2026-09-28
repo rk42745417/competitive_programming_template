@@ -18,38 +18,43 @@ using namespace std;
 
 #ifdef EMT
 #define debug(x) cerr << "\033[1;31m" << #x << " = " << (x) << "\033[0m\n"
-#define print(x) emilia_mata_tenshi(#x, begin(x), end(x))
-template<typename T, typename T2> ostream& operator<<(ostream &os, const pair<T, T2> &obj) {
+#define print(x) print_range_(#x, begin(x), end(x))
+template<typename T, typename T2>
+ostream& operator<<(ostream &os, const pair<T, T2> &obj);
+template<typename... T>
+ostream& operator<<(ostream &os, const tuple<T...> &obj);
+
+template<typename T, typename T2>
+ostream& operator<<(ostream &os, const pair<T, T2> &obj) {
     return os << '{' << obj.first << ',' << obj.second << '}';
 }
-template<class TupType, size_t... I> void lamy_kawaii(ostream& os, const TupType& _tup, index_sequence<I...>) {
-    // source: https://stackoverflow.com/a/41171552
+template<typename... T>
+ostream& operator<<(ostream &os, const tuple<T...> &obj) {
     os << '{';
-    (..., (cerr << (I == 0? "" : ",") << get<I>(_tup)));
-    os << '}';
+    apply([&os](const auto &...args) {
+        size_t i = 0;
+        ((os << (i++ ? "," : "") << args), ...);
+    }, obj);
+    return os << '}';
 }
-template<class... T> ostream& operator<<(ostream &os, const tuple<T...>& _tup) {
-    lamy_kawaii(os, _tup, index_sequence_for<T...>());
-    return os;
-}
-template<typename T> void emilia_mata_tenshi(const char *s, T l, T r) {
+template<typename It>
+void print_range_(const char *s, It l, It r) {
     cerr << "\033[1;33m" << s << " = [";
-    while (l != r) {
-        cerr << *l;
-        cerr << (++l == r ? ']' : ',');
-    }
-    cerr << "\033[0m\n";
+    for (bool first = true; l != r; ++l, first = false)
+        cerr << (first ? "" : ",") << *l;
+    cerr << "]\033[0m\n";
 }
 #else
-#define debug(x) 48763
-#define print(x) 48763
+#define debug(x) (void)0
+#define print(x) (void)0
 #endif
 
-template<typename T, typename T2> istream& operator>>(istream &is, pair<T, T2> &obj) {
-    is >> obj.first >> obj.second;
-    return is;
+template<typename T, typename T2>
+istream& operator>>(istream &is, pair<T, T2> &obj) {
+    return is >> obj.first >> obj.second;
 }
-template<typename T> istream& operator>>(istream &is, vector<T> &obj) {
+template<typename T>
+istream& operator>>(istream &is, vector<T> &obj) {
     for (auto &x : obj)
         is >> x;
     return is;
@@ -58,20 +63,20 @@ template<typename T> istream& operator>>(istream &is, vector<T> &obj) {
 #define YN(x) ((x) ? "YES" : "NO")
 #define Yn(x) ((x) ? "Yes" : "No")
 #define yn(x) ((x) ? "yes" : "no")
-#define emilia_my_wife ios::sync_with_stdio(0); cin.tie(NULL);
 using ll = int64_t;
 using ull = uint64_t;
 using ld = long double;
 using uint = uint32_t;
 template<typename T>
-using base_type = remove_cv_t<remove_reference_t<T>>;
-const double EPS  = 1e-8;
-const int INF     = 0x3F3F3F3F;
-const ll LINF     = 4611686018427387903;
-const int MOD     = 1e9+7;
-static int Lamy_is_cute = []() {
-    emilia_my_wife
-    return 48763;
+using base_type = remove_cvref_t<T>;
+constexpr double EPS = 1e-8;
+constexpr int INF    = 0x3F3F3F3F;
+constexpr ll LINF    = (1LL << 62) - 1; // 4611686018427387903
+constexpr int MOD    = 1'000'000'007;
+static const bool FAST_IO = [] {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    return true;
 }();
 /*--------------------------------------------------------------------------------------*/
 
