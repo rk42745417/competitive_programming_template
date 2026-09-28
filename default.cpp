@@ -17,8 +17,7 @@
 using namespace std;
 
 #ifdef EMT
-#define debug(x) cerr << "\033[1;31m" << #x << " = " << (x) << "\033[0m\n"
-#define print(x) print_range_(#x, begin(x), end(x))
+#define debug(...) debug_(#__VA_ARGS__ __VA_OPT__(,) __VA_ARGS__)
 template<typename T, typename T2>
 ostream& operator<<(ostream &os, const pair<T, T2> &obj);
 template<typename... T>
@@ -46,16 +45,38 @@ ostream& operator<<(ostream &os, const R &obj) {
         os << (first ? "" : ",") << x, first = false;
     return os << ']';
 }
-template<typename It>
-void print_range_(const char *s, It l, It r) {
-    cerr << "\033[1;33m" << s << " = [";
-    for (bool first = true; l != r; ++l, first = false)
-        cerr << (first ? "" : ",") << *l;
-    cerr << "]\033[0m\n";
+// debug(a, b, ...) prints "a = .. | b = ..", names are split on commas outside brackets and quotes
+template<typename... T>
+void debug_(string_view names, const T &...args) {
+    size_t pos = 0;
+    [[maybe_unused]] auto next_name = [&] {
+        size_t st = min(names.find_first_not_of(' ', pos), names.size()), j = st;
+        int depth = 0;
+        for (char quote = 0; j < names.size(); j++) {
+            char c = names[j];
+            if (quote) {
+                if (c == '\\')
+                    j++;
+                else if (c == quote)
+                    quote = 0;
+            } else if (c == '"' || c == '\'')
+                quote = c;
+            else if (c == '(' || c == '[' || c == '{')
+                depth++;
+            else if (c == ')' || c == ']' || c == '}')
+                depth--;
+            else if (c == ',' && !depth)
+                break;
+        }
+        pos = j + 1;
+        return names.substr(st, j - st);
+    };
+    cerr << "\033[1;31m";
+    ((cerr << (pos ? " | " : "") << next_name() << " = " << args), ...);
+    cerr << "\033[0m\n";
 }
 #else
-#define debug(x) (void)0
-#define print(x) (void)0
+#define debug(...) (void)0
 #endif
 
 template<typename T, typename T2>
