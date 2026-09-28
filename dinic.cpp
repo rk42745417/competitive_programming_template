@@ -75,4 +75,10 @@ struct dinic {
         return cut;
     }
 };
+/*
+ * dinic(int n, int s, int t): n nodes, source s, sink t
+ * add_edge(int u, int v, ll cap): directed edge u -> v
+ * flow(): return max flow
+ * min_cut(): after flow(), true for nodes on the source side of a min cut
+ */
 /*********************** Dinic's Max Flow ***********************/

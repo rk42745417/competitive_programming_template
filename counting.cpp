@@ -30,4 +30,10 @@ namespace counting {
         ll catalan(int n) const { return c(2 * n, n) * inv(n + 1) % MOD; }
     };
 } using namespace counting;
+/*
+ * mpow(a, b): a^b mod MOD
+ * combinatoric cb(n): tables for 0..n-1
+ * cb.p(n, m) / cb.c(n, m) / cb.h(n, m): nPm / nCm / C(n + m - 1, m), 0 if out of range
+ * cb.inv(n): inverse of n (n >= 1), cb.catalan(n): needs table size > 2n
+ */
 /****************** Counting (mod MOD) ******************/

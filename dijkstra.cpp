@@ -40,4 +40,10 @@ struct shortest_path {
         return res;
     }
 };
+/*
+ * shortest_path<T> sp(int n): n nodes, weights must be non-negative
+ * add_edge(int u, int v, T w): directed edge u -> v
+ * run(int s): return distances from s, T_INF if unreachable
+ * path(int t): nodes on a shortest path s -> t, empty if unreachable
+ */
 /****************** Dijkstra's algorithm *****************/

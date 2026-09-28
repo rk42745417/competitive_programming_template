@@ -58,4 +58,10 @@ int ori(const point<T> &a, const point<T> &b, const point<T> &c) {
         return (v > 0) - (v < 0);
 }
 const double PI = acos(-1.0);
+/*
+ * + - * / : vector ops (a * b is dot, a * k is scale), ^ : cross
+ * dis2() / len() / prep() / quad() / angle()
+ * sort(v.begin(), v.end(), point<T>::angle_sort_cmp): polar sort
+ * ori(a, b, c): 1 ccw, -1 cw, 0 collinear
+ */
 /*********** Geometry--Points *************/

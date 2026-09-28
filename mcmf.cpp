@@ -95,4 +95,9 @@ struct cost_flow {
         return {fl, cost};
     }
 } flow;
+/*
+ * init(int n, int s, int t): n nodes, source s, sink t
+ * add_edge(int u, int v, ll cap, ll cost): directed edge, negative cost ok without negative cycles
+ * flow(): return {max flow, min cost}
+ */
 /**************************** Min Cost Max Flow *************************/

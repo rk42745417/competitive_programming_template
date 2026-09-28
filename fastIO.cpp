@@ -62,4 +62,9 @@ void W(const char *s) {
     while (*s)
         fast_io::pc(*s++);
 }
+/*
+ * R(T &x): read an integer of any integral type, return false on EOF
+ * W(x): write an integer / char / C string, output is flushed at exit
+ * do not mix with cin / scanf / cout / printf, not for interactive problems
+ */
 /*********************** Fast IO *********************/

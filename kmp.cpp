@@ -29,4 +29,8 @@ vector<int> kmp_match(const string &text, const string &pat) {
     }
     return res;
 }
+/*
+ * kmp(s): prefix function, dp[i] = longest proper border of s[0..i]
+ * kmp_match(text, pat): start indices of all occurrences of pat in text
+ */
 /************** KMP algorithm *************/

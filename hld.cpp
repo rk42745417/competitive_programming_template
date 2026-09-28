@@ -68,4 +68,10 @@ struct heavy_light_decomposition {
         return res + tree.que(pos[a], pos[b] + 1);
     }
 } hld;
+/*
+ * init(int rt): build, then tree.init(n) separately
+ * pos[u]: index of u in tree, subtree(u): [l, r) of u's subtree in tree
+ * edt(a, b, v) / query(a, b): path add / path sum
+ * lca(a, b): lowest common ancestor
+ */
 /****************** Heavy Light Decomposition ***************/

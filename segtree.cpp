@@ -62,4 +62,9 @@ struct segtree {
         return res;
     }
 } tree;
+/*
+ * init(int n) / init(vector<ll> a): zeros / build from a
+ * edt(int l, int r, ll v): add v on [l, r)
+ * que(int l, int r): sum of [l, r)
+ */
 /*************************** Segment Tree ************************/

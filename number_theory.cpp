@@ -103,4 +103,10 @@ namespace number_theory {
         return res;
     }
 } using namespace number_theory;
+/*
+ * prime_sieve ps(int n, bool with_lpf = false): primes in [0, n)
+ * ps.prime_cnt() / ps[i] / ps.is_prime(x) / ps.factorize(x) (needs with_lpf)
+ * is_prime(ull x): deterministic Miller-Rabin
+ * factorize(ull x): sorted prime factors by Pollard rho
+ */
 /****** number theory(divisors primes...) algorithms ***/
