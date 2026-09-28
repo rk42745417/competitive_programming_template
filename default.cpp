@@ -23,6 +23,8 @@ template<typename T, typename T2>
 ostream& operator<<(ostream &os, const pair<T, T2> &obj);
 template<typename... T>
 ostream& operator<<(ostream &os, const tuple<T...> &obj);
+template<ranges::range R> requires (!is_convertible_v<const R&, string_view>)
+ostream& operator<<(ostream &os, const R &obj);
 
 template<typename T, typename T2>
 ostream& operator<<(ostream &os, const pair<T, T2> &obj) {
@@ -36,6 +38,13 @@ ostream& operator<<(ostream &os, const tuple<T...> &obj) {
         ((os << (i++ ? "," : "") << args), ...);
     }, obj);
     return os << '}';
+}
+template<ranges::range R> requires (!is_convertible_v<const R&, string_view>)
+ostream& operator<<(ostream &os, const R &obj) {
+    os << '[';
+    for (bool first = true; const auto &x : obj)
+        os << (first ? "" : ",") << x, first = false;
+    return os << ']';
 }
 template<typename It>
 void print_range_(const char *s, It l, It r) {

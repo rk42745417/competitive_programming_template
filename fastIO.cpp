@@ -24,7 +24,7 @@ namespace fast_io {
     }
     struct flusher { ~flusher() { flush(); } } flusher_;
 }
-template<typename T>
+template<integral T>
 bool R(T &a) {
     using fast_io::gc;
     int c = gc();
@@ -43,7 +43,7 @@ bool R(T &a) {
     a = T(neg ? 0 - u : u);
     return true;
 }
-template<typename T>
+template<integral T>
 void W(T a) {
     char buf[24];
     int n = 0;

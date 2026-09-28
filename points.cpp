@@ -1,4 +1,4 @@
-template<typename T>
+template<typename T> requires is_arithmetic_v<T>
 struct point {
     T x, y;
     point() : x(0), y(0) {}
@@ -13,9 +13,9 @@ struct point {
 
     T operator*(const point &b) const { return x * b.x + y * b.y; }
     T operator^(const point &b) const { return x * b.y - y * b.x; }
-    bool operator==(const point &b) const { return x == b.x && y == b.y; }
-    bool operator!=(const point &b) const { return !(*this == b); }
-    bool operator<(const point &b) const { return x == b.x ? y < b.y : x < b.x; }
+    // lexicographic by (x, y); also provides !=, <, <=, >, >=
+    auto operator<=>(const point &b) const = default;
+    bool operator==(const point &b) const = default;
 
     T dis2() const { return (*this) * (*this); }
     double len() const { return sqrt((double)dis2()); }

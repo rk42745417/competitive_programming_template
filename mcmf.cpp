@@ -26,7 +26,7 @@ struct cost_flow {
     // SPFA once for initial potentials, so negative costs are allowed (no negative cycles)
     void init_potential() {
         vector<bool> inq(n);
-        fill(h.begin(), h.end(), COST_INF);
+        ranges::fill(h, COST_INF);
         h[s] = 0;
         queue<int> que;
         que.push(s);
@@ -48,7 +48,7 @@ struct cost_flow {
     // Dijkstra on reduced costs c(u, v) + h[u] - h[v] >= 0
     bool dijkstra() {
         using node = pair<ll, int>;
-        fill(dis.begin(), dis.end(), COST_INF);
+        ranges::fill(dis, COST_INF);
         dis[s] = 0;
         priority_queue<node, vector<node>, greater<>> pq;
         pq.emplace(0, s);

@@ -1,4 +1,4 @@
-template<typename T>
+template<typename T> requires is_arithmetic_v<T>
 struct shortest_path {
     static constexpr T T_INF = numeric_limits<T>::max();
     int n;
@@ -36,7 +36,7 @@ struct shortest_path {
         vector<int> res;
         for (int v = t; v != -1; v = prv[v])
             res.push_back(v);
-        reverse(res.begin(), res.end());
+        ranges::reverse(res);
         return res;
     }
 };

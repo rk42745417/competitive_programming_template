@@ -21,7 +21,7 @@ struct segtree {
             tag[p] += val;
     }
     void push(int p) {
-        for (int h = __lg(p); ~h; h--) {
+        for (int h = bit_width(unsigned(p)) - 1; ~h; h--) {
             int i = p >> h;
             if (!tag[i >> 1])
                 continue;

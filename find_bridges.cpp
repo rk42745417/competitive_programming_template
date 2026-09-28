@@ -34,7 +34,7 @@ struct find_bridges {
         for (int i = 0; i < n; i++)
             if (!tim[i])
                 dfs(i);
-        return (int)count(is.begin(), is.end(), true);
+        return (int)ranges::count(is, true);
     }
     bool is_bridge(int x) const { return is[x]; }
 };

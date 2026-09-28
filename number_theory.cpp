@@ -44,8 +44,12 @@ namespace number_theory {
             return res;
         }
     };
-    ull mul_mod(ull a, ull b, ull m) { return ull(__uint128_t(a) * b % m); }
-    ull pow_mod(ull a, ull b, ull m) {
+    constexpr ull mul_mod(ull a, ull b, ull m) {
+        if ((a | b) >> 32 == 0) // product fits in 64 bits, avoid the slow 128-bit division
+            return a * b % m;
+        return ull(__uint128_t(a) * b % m);
+    }
+    constexpr ull pow_mod(ull a, ull b, ull m) {
         ull res = 1 % m;
         for (a %= m; b; b >>= 1, a = mul_mod(a, a, m))
             if (b & 1)
@@ -59,7 +63,7 @@ namespace number_theory {
         for (ull p : {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37})
             if (x % p == 0)
                 return x == p;
-        int s = __builtin_ctzll(x - 1);
+        int s = countr_zero(x - 1);
         ull d = (x - 1) >> s;
         for (ull a : {2, 325, 9375, 28178, 450775, 9780504, 1795265022}) {
             ull y = pow_mod(a, d, x);

@@ -1,5 +1,5 @@
 namespace counting {
-    ll mpow(ll a, ull b) {
+    constexpr ll mpow(ll a, ull b) {
         ll res = 1;
         for (a = (a % MOD + MOD) % MOD; b; b >>= 1, a = a * a % MOD)
             if (b & 1)

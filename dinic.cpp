@@ -10,7 +10,7 @@ struct dinic {
     int n, m = 0;
     int s, t;
     vector<int> level, ptr;
-    queue<int> q;
+    vector<int> q;
     dinic(int _n, int _s, int _t) : adj(_n), n(_n), s(_s), t(_t), level(_n), ptr(_n) {}
     void add_edge(int v, int u, ll cap) {
         edges.emplace_back(v, u, cap);
@@ -20,16 +20,18 @@ struct dinic {
         m += 2;
     }
     bool bfs() {
-        while (!q.empty()) {
-            int v = q.front();
-            q.pop();
+        ranges::fill(level, -1);
+        level[s] = 0;
+        q.assign(1, s);
+        for (size_t k = 0; k < q.size() && level[t] == -1; k++) {
+            int v = q[k];
             for (int id : adj[v]) {
                 if (edges[id].cap - edges[id].flow < 1)
                     continue;
                 if (level[edges[id].u] != -1)
                     continue;
                 level[edges[id].u] = level[v] + 1;
-                q.push(edges[id].u);
+                q.push_back(edges[id].u);
             }
         }
         return level[t] != -1;
@@ -56,12 +58,9 @@ struct dinic {
     ll flow() {
         ll f = 0;
         while (true) {
-            fill(level.begin(), level.end(), -1);
-            level[s] = 0;
-            q.push(s);
             if (!bfs())
                 break;
-            fill(ptr.begin(), ptr.end(), 0);
+            ranges::fill(ptr, 0);
             while (ll pushed = dfs(s, flow_inf))
                 f += pushed;
         }
